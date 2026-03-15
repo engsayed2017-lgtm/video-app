@@ -1,23 +1,88 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [videoUrl, setVideoUrl] = useState('');
+  const [qualities, setQualities] = useState([]);
+  const [selectedQuality, setSelectedQuality] = useState('');
+  const [downloadLink, setDownloadLink] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchQualities = () => {
+    if (!videoUrl) {
+      alert('من فضلك أدخل رابط الفيديو');
+      return;
+    }
+    setIsLoading(true);
+    setTimeout(() => {
+      setQualities(['144p', '360p', '720p', '1080p', 'mp3']);
+      setIsLoading(false);
+    }, 1500);
+  };
+
+  const watchAd = () => {
+    window.open('https://omg10.com/4/10732395', '_blank');
+    setTimeout(() => {
+      setDownloadLink('https://ouo.io/api/SaohjboC?s=https://example.com/video.mp4');
+    }, 5000);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h1>🎬 Video Downloader Pro</h1>
+      <input
+        type="text"
+        value={videoUrl}
+        onChange={(e) => setVideoUrl(e.target.value)}
+        placeholder="Paste video URL"
+        style={{ width: '80%', padding: '10px', margin: '10px' }}
+      />
+      <button onClick={fetchQualities} disabled={isLoading}>
+        {isLoading ? 'Loading...' : 'Get Qualities'}
+      </button>
+
+      {qualities.length > 0 && (
+        <div>
+          <h3>Select Quality:</h3>
+          {qualities.map(q => (
+            <button
+              key={q}
+              onClick={() => setSelectedQuality(q)}
+              style={{
+                margin: '5px',
+                padding: '10px',
+                background: selectedQuality === q ? '#4CAF50' : '#ddd'
+              }}
+            >
+              {q}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {selectedQuality && (
+        <button
+          onClick={watchAd}
+          style={{
+            margin: '20px',
+            padding: '15px 30px',
+            background: '#FF9800',
+            color: 'white',
+            fontSize: '18px'
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          Watch Ad to Download
+        </button>
+      )}
+
+      {downloadLink && (
+        <div>
+          <h3>Download Link:</h3>
+          <a href={downloadLink} target="_blank" rel="noopener noreferrer">
+            {downloadLink}
+          </a>
+        </div>
+      )}
     </div>
   );
 }
